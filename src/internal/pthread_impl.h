@@ -59,6 +59,9 @@ struct pthread {
 	char *dlerror_buf;
 	void *stdio_locks;
 
+	void *mi_default_heap;
+	_Bool mi_recurse;
+
 	/* Part 3 -- the positions of these fields relative to
 	 * the end of the structure is external and internal ABI. */
 #ifdef TLS_ABOVE_TP

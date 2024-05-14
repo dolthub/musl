@@ -1791,6 +1791,10 @@ void __dls2b(size_t *sp, size_t *auxv)
 	else ((stage3_func)laddr(&ldso, dls3_def.sym->st_value))(sp, auxv);
 }
 
+static void __mi_process_init(void) {
+}
+weak_alias(__mi_process_init, _mi_process_init);
+
 /* Stage 3 of the dynamic linker is called with the dynamic linker/libc
  * fully functional. Its job is to load (if not already loaded) and
  * process dependencies and relocations for the main application and
@@ -1812,6 +1816,9 @@ void __dls3(size_t *sp, size_t *auxv)
 	/* Find aux vector just past environ[] and use it to initialize
 	 * global data that may be needed before we can make syscalls. */
 	__environ = envp;
+
+	_mi_process_init();
+
 	decode_vec(auxv, aux, AUX_CNT);
 	search_vec(auxv, &__sysinfo, AT_SYSINFO);
 	__pthread_self()->sysinfo = __sysinfo;

@@ -11,6 +11,12 @@
 
 volatile int __thread_list_lock;
 
+/*
+static void *___mi_heap_empty_ptr = 0;
+weak_alias(___mi_heap_empty_ptr, __mi_heap_empty_ptr);
+*/
+extern void *__mi_heap_empty_ptr;
+
 int __init_tp(void *p)
 {
 	pthread_t td = p;
@@ -24,6 +30,8 @@ int __init_tp(void *p)
 	td->robust_list.head = &td->robust_list.head;
 	td->sysinfo = __sysinfo;
 	td->next = td->prev = td;
+	td->mi_recurse = 0;
+	td->mi_default_heap = __mi_heap_empty_ptr;
 	return 0;
 }
 

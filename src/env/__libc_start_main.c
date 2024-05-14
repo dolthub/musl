@@ -15,6 +15,8 @@ extern weak hidden void (*const __init_array_start)(void), (*const __init_array_
 static void dummy1(void *p) {}
 weak_alias(dummy1, __init_ssp);
 
+weak_alias(dummy, _mi_process_init);
+
 #define AUX_CNT 38
 
 #ifdef __GNUC__
@@ -38,6 +40,8 @@ void __init_libc(char **envp, char *pn)
 
 	__init_tls(aux);
 	__init_ssp((void *)aux[AT_RANDOM]);
+
+	_mi_process_init();
 
 	if (aux[AT_UID]==aux[AT_EUID] && aux[AT_GID]==aux[AT_EGID]
 		&& !aux[AT_SECURE]) return;

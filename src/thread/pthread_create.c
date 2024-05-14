@@ -20,6 +20,8 @@ weak_alias(dummy_0, __membarrier_init);
 static int tl_lock_count;
 static int tl_lock_waiters;
 
+extern void *__mi_heap_empty_ptr;
+
 void __tl_lock(void)
 {
 	int tid = __pthread_self()->tid;
@@ -327,6 +329,8 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 	new->robust_list.head = &new->robust_list.head;
 	new->canary = self->canary;
 	new->sysinfo = self->sysinfo;
+	new->mi_recurse = self->mi_recurse;
+	new->mi_default_heap = __mi_heap_empty_ptr;
 
 	/* Setup argument structure for the new thread on its stack.
 	 * It's safe to access from the caller only until the thread
